@@ -3,6 +3,7 @@ import os
 class Config:
     
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://oscar:1803@localhost/oneminpitch'
 
 
 class ProdConfig(Config):
