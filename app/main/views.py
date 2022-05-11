@@ -15,6 +15,7 @@ def index():
     return render_template('index.html',title = title, categories =all_category, all_pitches = all_pitches)
 
 @main.route('/category/new-pitch/<int:id',methods = ['GET','POST'])
+@login_required
 def new_pitch(id):
     
     form = PitchForm()
@@ -41,6 +42,7 @@ def category(id):
     return render_template('category.html', pitches=pitches, category=category)
 
 @main.route('/add/category', methods=['GET','POST'])
+@login_required
 def new_category():
     form = CategoryForm()
 
@@ -55,6 +57,7 @@ def new_category():
     return render_template('new_category.html', category_form = form, title = title)
 
 @main.route('/view-pitch/<int:id>', methods=['GET', 'POST'])
+@login_required
 def view_pitch(id):
     
     all_category = PitchCategory.get_categories()
@@ -69,6 +72,7 @@ def view_pitch(id):
     return render_template('view-pitch.html', pitches = pitches, comment = comment, count_likes=len(count_likes), count_dislikes=len(count_dislikes), category_id = id, categories=all_category)
 
 @main.route('/write_comment/<int:id>', methods=['GET', 'POST'])
+@login_required
 def post_comment(id):
     
     form = CommentForm()
@@ -87,6 +91,7 @@ def post_comment(id):
     return render_template('post_comment.html', comment_form = form, title = title)
 
 @main.route('/pitch/upvote/<int:id>&<int:vote_type>')
+@login_required
 def upvote(id,vote_type):
     votes = Votes.query.filter_by(user_id=current_user.id).all()
     print(f'The new vote is {votes}')
