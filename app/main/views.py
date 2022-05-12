@@ -1,20 +1,24 @@
-from flask import render_template,redirect,url_for,request,abort
-from . forms import PitchForm,CommentForm,Category
-from . import main
-
+from flask import render_template, request, redirect, url_for, abort
+from flask_login import login_required, current_user
+from . forms import PitchForm, CommentForm, CategoryForm,UpdateProfile
+from .import main
+from .. import db,photos
+from ..models import User, Pitch, Comments, PitchCategory,Votes
 
 @main.route('/')
 def index():
     
     all_category = PitchCategory.get_categories()
-    all_pitches = pitch.query.order_by('-id').all()
+    all_pitches = Pitch.query.order_by('id').all()
     print(all_pitches)
     
     title = 'Pitch Perfect'
     
     return render_template('index.html',title = title, categories =all_category, all_pitches = all_pitches)
 
-@main.route('/category/new-pitch/<int:id',methods = ['GET','POST'])
+
+
+@main.route('/category/new-pitch/<int:id>', methods=['GET', 'POST'])
 @login_required
 def new_pitch(id):
     
@@ -89,6 +93,28 @@ def post_comment(id):
         return redirect(url_for('.view_pitch', id = pitches.id))
 
     return render_template('post_comment.html', comment_form = form, title = title)
+
+@main.route('/user/<uname>')
+def profile(uname):
+    user = User.query.filter_by(username = uname).first()
+
+    if user is None:
+        abort(404)
+
+    return render_template("profile/profile.html", user = user)
+
+
+
+@main.route('/user/<uname>/update/pic',methods= ['POST'])
+@login_required
+def update_pic(uname):
+    user = User.query.filter_by(username = uname).first()
+    if 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        path = f'photos/{filename}'
+        user.profile_pic_path = path
+        db.session.commit()
+    return redirect(url_for('main.profile',uname=uname))
 
 @main.route('/pitch/upvote/<int:id>&<int:vote_type>')
 @login_required

@@ -16,3 +16,7 @@ class CategoryForm(FlaskForm):
     
     name =  StringField('Category Name', validators=[InputRequired()])
     submit = SubmitField('Create')
+    
+class UpdateProfile(FlaskForm):
+    bio = TextAreaField('bio', validators=[InputRequired()])
+    submit = SubmitField('Post')    

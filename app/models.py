@@ -5,8 +5,10 @@ from datetime import datetime
 from sqlalchemy.sql import func
 from . import db
 
-
-
+@login_manager.user_loader
+def load_user(user_id):
+    
+    return User.query.get(int(user_id))
 
 
 class User(UserMixin,db.Model):
@@ -36,11 +38,6 @@ class User(UserMixin,db.Model):
 
     def verify_password(self,password):
         return check_password_hash(self.pass_secure,password)
-
-
-    def __repr__(self):
-        return f'User {self.username}'
-
 
 
     def __repr__(self):
@@ -119,7 +116,29 @@ class Comments(db.Model):
      def get_comments(self, id):
         comment = Comments.query.order_by(Comments.time_posted.desc()).filter_by(pitches_id=id).all()
         return comment
-    
+
+class Votes(db.Model):
+    """
+    class to model votes
+    """
+    __tablename__='votes'
+
+    id = db.Column(db. Integer, primary_key=True)
+    vote = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    pitches_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+
+    def save_vote(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_votes(cls,user_id,pitches_id):
+        votes = Votes.query.filter_by(user_id=user_id, pitches_id=pitches_id).all()
+        return votes
+
+    def __repr__(self):
+        return f'{self.vote}:{self.user_id}:{self.pitches_id}'    
    
     
     

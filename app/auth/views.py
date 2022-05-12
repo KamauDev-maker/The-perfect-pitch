@@ -6,7 +6,6 @@ from ..import db
 from ..models import User
 
 
-# registration route
 @auth.route('templates/auth/reqister',methods=['GET','POST'])
 def register():
     """
