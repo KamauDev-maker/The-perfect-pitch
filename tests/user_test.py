@@ -1,10 +1,8 @@
 import unittest
-from app.models import User
-from app import db
 
 class UserModelTest(unittest.TestCase):
     def setUp(self):
-        self.new_user = User(username = "oscar", email ="oscar@gmail.com", bio = "I am cool", profile_pic_path = "image_url", password = 'lorna')
+        self.new_user = User(username = "oscar", email ="oscar@gmail.com", bio = "I am cool", profile_pic_path = "image_url", password = '123456')
         db.session.add(self.new_user)
         db.session.commit()
 
@@ -33,3 +31,6 @@ class UserModelTest(unittest.TestCase):
     def test_no_access_password(self):
         with self.assertRaises(AttributeError):
             self.new_user.password 
+            
+if __name__ == '__main':
+    unittest.main()            
