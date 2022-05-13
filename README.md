@@ -7,6 +7,7 @@
 This  is a flask application that allows users to add a category and post a one minute pitch and  also allows other users who have signed up to comment and upvote or downvote a pitch. It also allows a person to signup to be able to access the functionalities of the application
 
 ## Live Link
+[Pitch-Perfect](https://pitch2080.herokuapp.com/)
 
 
 ## User Story
